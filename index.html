@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      color: #007bff;
+    }
+    .info {
+      margin-bottom: 10px;
+      line-height: 1.6;
+    }
+    .info span {
+      font-weight: bold;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Device Information</h1>
+  <div id="deviceInfo">
+    <p class="info">Loading device information...</p>
+  </div>
+
+  <script>
+    function getBrowserName(userAgent) {
+      if (userAgent.indexOf("Firefox") > -1) return "Mozilla Firefox";
+      if (userAgent.indexOf("Chrome") > -1) return "Google Chrome";
+      if (userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") === -1) return "Apple Safari";
+      if (userAgent.indexOf("Edge") > -1) return "Microsoft Edge";
+      if (userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1) return "Microsoft Internet Explorer";
+      return "Unknown Browser";
+    }
+
+    function getOperatingSystem(userAgent) {
+      if (userAgent.indexOf("Windows NT") > -1) return "Windows";
+      if (userAgent.indexOf("Mac OS X") > -1) return "Mac OS";
+      if (userAgent.indexOf("Linux") > -1) return "Linux";
+      if (/Android/.test(userAgent)) return "Android";
+      if (/iPhone|iPad|iPod/.test(userAgent)) return "iOS";
+      return "Unknown OS";
+    }
+
+    function getDeviceInfo() {
+      const deviceInfoDiv = document.getElementById('deviceInfo');
+      
+      // Screen dimensions
+      const screenWidth = window.screen.width;
+      const screenHeight = window.screen.height;
+
+      // Viewport dimensions
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+
+      // Device pixel ratio
+      const pixelRatio = window.devicePixelRatio;
+
+      // Orientation
+      const orientation = window.matchMedia("(orientation: portrait)").matches ? "Portrait" : "Landscape";
+
+      // Touchscreen detection
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+      // User agent
+      const userAgent = navigator.userAgent;
+
+      // Browser and OS
+      const browserName = getBrowserName(userAgent);
+      const operatingSystem = getOperatingSystem(userAgent);
+
+      // Update information in the DOM
+      deviceInfoDiv.innerHTML = `
+        <p class="info"><span>Screen Size:</span> ${screenWidth}px x ${screenHeight}px</p>
+        <p class="info"><span>Window Size:</span> ${windowWidth}px x ${windowHeight}px</p>
+        <p class="info"><span>Pixel Ratio:</span> ${pixelRatio}</p>
+        <p class="info"><span>Orientation:</span> ${orientation}</p>
+        <p class="info"><span>Touch Device:</span> ${isTouchDevice ? "Yes" : "No"}</p>
+        <p class="info"><span>Operating System:</span> ${operatingSystem}</p>
+        <p class="info"><span>Browser:</span> ${browserName}</p>
+        <p class="info"><span>User Agent:</span> ${userAgent}</p>
+      `;
+    }
+
+    // Run on initial load and when the window is resized
+    window.addEventListener('resize', getDeviceInfo);
+
+    // Initial call
+    getDeviceInfo();
+  </script>
+</body>
+</html>
